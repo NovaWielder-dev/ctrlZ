@@ -14,7 +14,7 @@ int main() {
     std::vector<Action> all_actions;
 
     //Load data from .json
-    extractConfig("1.txt");
+    extractConfig("1.txt", );
     std::cout << "Data loaded successfully!" << std::endl;
 
     //Create optimizer
