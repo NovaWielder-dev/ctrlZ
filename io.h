@@ -1,4 +1,3 @@
-
 #ifndef IO_H
 #define IO_H
 
@@ -9,7 +8,7 @@
 class TricksterIO {
 public:
     // Mock function to load level data
-    void loadLevel(Car& car, std::vector<Segment>& track);
+    void loadLevel(Car& car, Race& race);
 
     // Mock function to write submission data
     void writeSubmission(const std::vector<Action>& actions);

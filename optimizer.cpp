@@ -1,21 +1,6 @@
 #include "optimizer.h"
 #include <algorithm>
 
-// Helper function to calculate max corner speed for Level 1
-double PandaOptimizer::calculateMaxCornerSpeed(const Car& car, const Segment& corner_segment) {
-    // Formula: Max Corner Speed = sqrt(tyre_friction * 9.8 * radius) + crawl_constant_m/s
-    // Assume tyre friction is 1.18 for the Soft tyre in dry weather (Level 1)
-    return std::sqrt(TYRE_FRICTION_LEVEL1 * GRAVITY * corner_segment.radius_m) + car.crawl_speed;
-}
-
-// Helper function to calculate braking distance
-double PandaOptimizer::calculateBrakingDistance(double initial_speed, double final_speed, double deceleration) {
-    // Formula: Distance = (initial_speed^2 - final_speed^2) / (2 * deceleration)
-    // This formula assumes initial_speed > final_speed for braking.
-    if (deceleration <= 0) return 0; // Avoid division by zero or non-physical deceleration
-    return (initial_speed * initial_speed - final_speed * final_speed) / (2 * deceleration);
-}
-
 // Function for Panda to optimize a single segment
 Action PandaOptimizer::optimizeSegment(const Car& car, const Segment& current_segment, const Segment* next_segment) {
     Action action;
@@ -28,8 +13,8 @@ Action PandaOptimizer::optimizeSegment(const Car& car, const Segment& current_se
 
         // Braking Logic: Look one step ahead to the next segment
         if (next_segment && next_segment->type == "corner") {
-            double next_corner_max_speed = calculateMaxCornerSpeed(car, *next_segment);
-            double braking_distance_needed = calculateBrakingDistance(action.target_m_s, next_corner_max_speed, car.brake);
+            double next_corner_max_speed = Physics::calculateMaxCornerSpeed(car, *next_segment);
+            double braking_distance_needed = Physics::calculateBrakingDistance(action.target_m_s, next_corner_max_speed, car.brake);
             
             // If the required braking distance is greater than the straight's length,
             // we cannot reach car.max_speed and brake safely. Adjust target_m_s.
@@ -50,7 +35,7 @@ Action PandaOptimizer::optimizeSegment(const Car& car, const Segment& current_se
         }
     } else if (current_segment.type == "corner") {
         // For corners, calculate the maximum safe speed
-        action.max_corner_speed_m_s = calculateMaxCornerSpeed(car, current_segment);
+        action.max_corner_speed_m_s = Physics::calculateMaxCornerSpeed(car, current_segment);
     }
     return action;
 }
