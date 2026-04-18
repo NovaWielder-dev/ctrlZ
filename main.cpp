@@ -5,6 +5,7 @@
 #include "optimizer.h"
 #include <iostream>
 
+
 int main() {
     std::cout << "Starting Entelect Grand Prix Simulator..." << std::endl;
 
