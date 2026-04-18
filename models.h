@@ -22,13 +22,22 @@ struct Car {
     double max_speed = 0.0;
     double accel = 0.0;
     double brake = 0.0;
-    double crawl_speed = 0.0;
+    double crawl_constant = 0.0;
+    double fuel_tank_capacity = 0.0;
+    double initial_fuel_l = 0.0;
+    double fuel_consumption = 0.0;
 };
 
 // Defines the overall race data
 struct Race {
     std::string name;
-    int total_laps;
-    double gravity = 9.8;
-    std::vector<Segment> segments;
+    int laps;
+    double base_pit_stop_time = 0.0;
+    double pit_tyre_swap_time = 0.0;
+    double pit_refuel_rate = 0.0;
+    double corner_crash_penalty = 0.0;
+    double pit_exit_speed = 0.0;
+    double fuel_soft_cap_limit = 0.0;
+    int starting_weather_condition = 0;
+    double time_reference = 0.0;
 };
