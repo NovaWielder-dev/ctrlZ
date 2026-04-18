@@ -40,4 +40,5 @@ struct Race {
     double fuel_soft_cap_limit = 0.0;
     int starting_weather_condition = 0;
     double time_reference = 0.0;
+    std::vector<Segment> segments;
 };

@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Action PandaStuff::optimizeSegment(
+Action PandaOptimizer::optimizeSegment(
     const Car& car,
     const Segment& current_segment,
     const Segment* next_segment,

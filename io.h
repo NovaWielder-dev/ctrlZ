@@ -1,8 +1,7 @@
-#ifndef IO_H
-#define IO_H
+#pragma once
+#include "models.h"
+#include <string>
 
 void extractConfig(const std::string& filename, Car& car, Race& race);
 
-#endif
-
-//
+void writeSubmission(const std::string& filename, const std::vector<Action>& actions, int total_laps);

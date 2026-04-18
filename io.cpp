@@ -55,3 +55,54 @@ void extractConfig(const std::string& filename, Car& car, Race& race) {
         race.segments.push_back(seg);
     }
 }
+
+void writeSubmission(const std::string& filename, const std::vector<Action>& actions, int total_laps) {
+    // 1. Create the master JSON object and hardcode the Level 1 tyre
+    json submission;
+    submission["initial_tyre_id"] = 1;
+
+    // Figure out how many segments are in a single lap
+    int segments_per_lap = actions.size() / total_laps;
+    
+    json laps_array = json::array();
+
+    // 2. Loop through each lap
+    for (int lap = 0; lap < total_laps; ++lap) {
+        json lap_obj;
+        
+        // Hardcode no pit stops for Level 1
+        lap_obj["pit"]["enter"] = false;
+
+        // 3. Loop through the segments for THIS specific lap
+        json segments_array = json::array();
+        for (int s = 0; s < segments_per_lap; ++s) {
+            
+            // Calculate where we are in the master flat list
+            int index = (lap * segments_per_lap) + s;
+            const Action& current_action = actions[index];
+
+            // Build the segment object
+            json seg_obj;
+            seg_obj["id"] = current_action.segment_id;
+            seg_obj["target_speed_m/s"] = current_action.target_m_s;
+            seg_obj["brake_start_m_before_next_segment"] = current_action.brake_start_m_before_next;
+            
+            segments_array.push_back(seg_obj);
+        }
+        
+        // Attach the segments to the lap, and the lap to the master array
+        lap_obj["segments"] = segments_array;
+        laps_array.push_back(lap_obj);
+    }
+
+    submission["laps"] = laps_array;
+
+    // 4. Save to the hard drive
+    std::ofstream file(filename);
+    if (file.is_open()) {
+        file << submission.dump(4); // .dump(4) adds nice spacing
+        std::cout << "SUCCESS: Wrote " << actions.size() << " actions to " << filename << std::endl;
+    } else {
+        std::cerr << "CRITICAL ERROR: Could not create " << filename << std::endl;
+    }
+}

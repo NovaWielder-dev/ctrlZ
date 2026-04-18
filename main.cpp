@@ -14,14 +14,14 @@ int main() {
     std::vector<Action> all_actions;
 
     //Load data from .json
-    extractConfig("1.txt", );
+    extractConfig("1.txt", my_car, my_race);
     std::cout << "Data loaded successfully!" << std::endl;
 
     //Create optimizer
     PandaOptimizer driver;
 
     //Loop through laps
-    for (int lap = 1; lap <= my_race.total_laps; ++lap) {
+    for (int lap = 1; lap <= my_race.laps; ++lap) {
         
         //Loop through segments
         for (size_t i = 0; i < my_race.segments.size(); ++i) {
@@ -36,14 +36,14 @@ int main() {
                 next = my_race.segments[0];
             }
 
-            Action a = driver.optimizeSegment(my_car, current, next);
+            Action a = driver.optimizeSegment(my_car, current, &next, 9.81);
 
             all_actions.push_back(a);
         }
     }
 
-    //[Trickster: Export final JSON]
-    //writeSubmission("submission.txt", all_actions);
+    // 6. Export the final JSON
+    writeSubmission("submission.txt", all_actions, my_race.laps);
 
     std::cout << "Race Complete! Output saved." << std::endl;
     return 0;
